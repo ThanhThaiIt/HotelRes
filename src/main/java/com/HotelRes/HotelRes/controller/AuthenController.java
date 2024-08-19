@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.SecretKey;
@@ -26,12 +28,20 @@ public class AuthenController {
     @Autowired
     private JwtHelper jwtHelper;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @PostMapping
     public ResponseEntity<?> authen(@RequestBody AuthenRequest authenRequest) {
 
-        boolean issucess = userService.registerUser(authenRequest);
 
-        String token = issucess ? jwtHelper.generateToken(authenRequest.email()) : "fail authentication";
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(authenRequest.email(),authenRequest.password());
+
+        authenticationManager.authenticate(authenticationToken);
+
+         String token =    jwtHelper.generateToken(authenRequest.email());
 
         BaseResponse baseResponse = new BaseResponse();
 

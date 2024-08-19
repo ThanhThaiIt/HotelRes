@@ -27,4 +27,16 @@ public class JwtHelper {
 
         return token;
     }
+
+    // giải mã token
+    public String decodeToken(String token) {
+
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(keysecret));
+
+       return Jwts.parser().verifyWith(key).build()
+                .parseClaimsJws(token)
+                .getPayload()
+                .getSubject();
+
+    }
 }
