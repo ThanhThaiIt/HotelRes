@@ -38,12 +38,14 @@ public class CustomSecurity {// Stop video at 1h:00, video 38
                 .build();
     }
 
+    //,"MANAGER"
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomFilter customFilter) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers("/authen","/hello/contho").permitAll();
+                    request.requestMatchers("/room").hasAnyRole("ADMIN");
                     request.anyRequest().authenticated();
 
                 })

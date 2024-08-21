@@ -17,4 +17,11 @@ public class RoomController {
 
         return new ResponseEntity<>("hello room nhe", HttpStatus.OK);
     }
+
+
+    @PostMapping
+    public ResponseEntity<?> addRoom(){
+
+        return new ResponseEntity<>("addroom ne", HttpStatus.OK);
+    }
 }
